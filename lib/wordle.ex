@@ -1,12 +1,11 @@
 defmodule Wordle do
-  alias Wordle.Application.{Repository}
+  alias Wordle.Application.{GameSupervisor, Repository}
 
   import Wordle.Application.GameReg
 
   def start do
     word_of_today = Wordle.Words.pick(Date.utc_today())
-    %{game_id: game_id} = initial_state = Wordle.State.new(word_of_today)
-    Repository.start_link(initial_state)
+    %{game_id: game_id} = GameSupervisor.start_game(word_of_today)
     game_id
   end
 
